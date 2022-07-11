@@ -11,7 +11,8 @@ class TypeController {
     }
 
     async getAll(req, res) {
-        
+        const types = await Type.findAll(); // вернет все записи из бд
+        return res.json(types);
     }
 
     async getOne(req, res) {

@@ -99,7 +99,7 @@ Device.hasMany(BasketDevice);
 BasketDevice.belongsTo(Device);
 
 // у девайса одна запись в базе данных содержит много записей с характеристиками
-Device.hasMany(DeviceInfo); 
+Device.hasMany(DeviceInfo, {as: 'info'}); 
 DeviceInfo.belongsTo(Device);
 
 // один тип односится к нескольким брендам
