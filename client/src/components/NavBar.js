@@ -9,26 +9,34 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import { NavLink } from 'react-router-dom';
 import { ADMIN_ROUTE, LOGIN_ROUTE, SHOP_ROUTE } from '../utils/consts';
 import { Link } from 'react-router-dom';
-import {observer} from 'mobx-react-lite'
+import {observer} from 'mobx-react-lite';
+import { useNavigate } from 'react-router-dom';
 
 const NavBar = observer(() => {
     const {user} = useContext(Context);
+    const navigate = useNavigate();
+
+    const logOut = () => {
+      user.setUser({});
+      user.setIsAuth(false);
+    }
+
     return (
         <Navbar bg="light" variant="light">
         <Container>
             <NavLink style={{color: 'grey', textDecoration: 'none'}} to={SHOP_ROUTE}>BuyYourDevice</NavLink>
           {user.isAuth ? 
                 <Nav className="ml-auto">
-                    <Button variant={'outline-light'} style={{color: 'grey', textDecoration: 'none', marginLeft: 25}} 
-                    >Войти</Button>
-                    <Button variant={'outline-light'} style={{color: 'grey', textDecoration: 'none', marginLeft: 25}} 
+                    <Button variant={'outline-light'} onClick={() => logOut()}
+                    style={{color: 'grey', textDecoration: 'none', marginLeft: 25}} 
+                    >Выйти</Button>
+                    <Button variant={'outline-light'} onClick={() => navigate(ADMIN_ROUTE)}
+                    style={{color: 'grey', textDecoration: 'none', marginLeft: 25}} 
                     >Админ Панель</Button>
-                  {/* <Link style={{color: 'grey', textDecoration: 'none', marginLeft: 25}} to={LOGIN_ROUTE}>Войти</Link>
-                  <Link style={{color: 'grey', textDecoration: 'none', marginLeft: 25}} to={ADMIN_ROUTE}>Админ Панель</Link> */}
                 </Nav> :
                 <Nav className="ml-auto">
                     <Button variant={'outline-light'} style={{color: 'grey', textDecoration: 'none', marginLeft: 25}} 
-                    to={LOGIN_ROUTE} onClick={() => user.setIsAuth(true)}>Авторизация</Button>
+                    to={LOGIN_ROUTE} onClick={() => navigate(LOGIN_ROUTE)}>Авторизация</Button>
                 </Nav>  
         }
         </Container>
