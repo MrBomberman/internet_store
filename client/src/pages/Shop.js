@@ -4,12 +4,13 @@ import {Container, Row, Col} from "react-bootstrap";
 import { Context } from "..";
 import BrandBar from "../components/BrandBar";
 import DeviceList from "../components/DeviceList";
+import Pages from "../components/Pages";
 import TypeBar from "../components/TypeBar";
-import { fetchBrands, fetchTypes } from "../http/deviceAPI";
+import { fetchBrands, fetchDevices, fetchTypes } from "../http/deviceAPI";
 
 const Shop = observer(() => {
 
-    const {device} = useContext(Context);
+    const {device, user} = useContext(Context);
 
     useEffect(() => {
         fetchTypes().then(data => {
@@ -18,7 +19,21 @@ const Shop = observer(() => {
         fetchBrands().then(data => {
             device.setBrands(data)
         })
+        fetchDevices(null, null, 1, 4).then(data => {
+            device.setDevices(data.rows);
+            device.setTotalCount(data.count); // для подсчета общего кол-ва страниц с товаром
+        })
+        console.log(user.isAuth)
     }, [])
+
+    useEffect(() => {
+        fetchDevices(device.selectedType.id, device.selectedBrand.id, device.page, device.limit)
+        .then(data => {
+            device.setDevices(data.rows);
+            device.setTotalCount(data.count); // для подсчета общего кол-ва страниц с товаром
+        })
+    }, [device.page, device.selectedType, device.selectedBrand])
+
 
     return (
         <Container>
@@ -29,6 +44,7 @@ const Shop = observer(() => {
                 <Col md={9}>
                     <BrandBar/>
                     <DeviceList/>
+                    <Pages/>
                 </Col>
             </Row>
         </Container>

@@ -1,23 +1,33 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Card, Col, Container, Image, Row } from "react-bootstrap";
 import bigStar from '../assets/bigStar.png';
+import { useParams } from "react-router-dom";
+import { Context } from "..";
+import { fetchOneDevice } from "../http/deviceAPI";
 
 const DevicePage = () => {
-    const device =  {id: 3, name: 'IPHONE 12', price: 60000, rating: 4, img: 'https://images.unsplash.com/photo-1611791485440-24e8239a0377?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aXBob25lJTIwMTIlMjBwcm98ZW58MHx8MHx8&w=1000&q=80'};
+    // const device =  {id: 3, name: 'IPHONE 12', price: 60000, rating: 4, img: 'https://images.unsplash.com/photo-1611791485440-24e8239a0377?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aXBob25lJTIwMTIlMjBwcm98ZW58MHx8MHx8&w=1000&q=80'};
     
-    const description = [
-        {id: 1, title: 'Оперативная память', description: '5 гб'},
-        {id: 2, title: 'Оперативная память', description: '5 гб'},
-        {id: 3, title: 'Оперативная память', description: '5 гб'},
-        {id: 4, title: 'Оперативная память', description: '5 гб'},
-        {id: 5, title: 'Оперативная память', description: '5 гб'},
-    ]
+    // const description = [
+    //     {id: 1, title: 'Оперативная память', description: '5 гб'},
+    //     {id: 2, title: 'Оперативная память', description: '5 гб'},
+    //     {id: 3, title: 'Оперативная память', description: '5 гб'},
+    //     {id: 4, title: 'Оперативная память', description: '5 гб'},
+    //     {id: 5, title: 'Оперативная память', description: '5 гб'},
+    // ]
+
+    const [device , setDevice] = useState({info:[]});
+    const params = useParams();
+    useEffect(() => {
+        fetchOneDevice(params.id).then(data => setDevice(data))
+    },[])
+
     return (
         <Container>
             {/* чтобы колонки не переходили на другую строку, добавляем их в Row */}
             <Row>
                 <Col md={4}>
-                    <Image width={300} height={300} src={device.img} className='mt-3'/>
+                    <Image width={300} height={300} src={process.env.REACT_APP_API_URL + device.img} className='mt-3'/>
                 </Col>
                 <Col md={4}>
                     <Row className="d-flex flex-column align-items-center">
@@ -42,7 +52,7 @@ const DevicePage = () => {
             </Row>
             <Row className='d-flex dlex-column m-5'>
                 <h1>Характеристики</h1>
-                {description.map((info, index) => {
+                {device.info.map((info, index) => {
                     return <Row key={info.id}
                     style={{background: index % 2 === 0 ? 'lightgray' : 'transparent', 
                     padding: 10}}>

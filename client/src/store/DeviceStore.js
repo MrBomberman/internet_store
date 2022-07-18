@@ -4,20 +4,12 @@ export default class DeviceStore {
     constructor() {
         this._types = []
         this._brands = []
-        this._devices = [
-            {id: 1, name: 'IPHONE 12', price: 60000, rating: 4, img: 'https://images.unsplash.com/photo-1611791485440-24e8239a0377?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aXBob25lJTIwMTIlMjBwcm98ZW58MHx8MHx8&w=1000&q=80'},
-            {id: 2, name: 'IPHONE 12', price: 60000, rating: 4, img: 'https://images.unsplash.com/photo-1611791485440-24e8239a0377?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aXBob25lJTIwMTIlMjBwcm98ZW58MHx8MHx8&w=1000&q=80'},
-            {id: 3, name: 'IPHONE 12', price: 60000, rating: 4, img: 'https://images.unsplash.com/photo-1611791485440-24e8239a0377?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aXBob25lJTIwMTIlMjBwcm98ZW58MHx8MHx8&w=1000&q=80'},
-            {id: 4, name: 'IPHONE 12', price: 60000, rating: 4, img: 'https://images.unsplash.com/photo-1611791485440-24e8239a0377?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aXBob25lJTIwMTIlMjBwcm98ZW58MHx8MHx8&w=1000&q=80'},
-            {id: 4, name: 'IPHONE 12', price: 60000, rating: 4, img: 'https://images.unsplash.com/photo-1611791485440-24e8239a0377?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aXBob25lJTIwMTIlMjBwcm98ZW58MHx8MHx8&w=1000&q=80'},
-            {id: 4, name: 'IPHONE 12', price: 60000, rating: 4, img: 'https://images.unsplash.com/photo-1611791485440-24e8239a0377?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aXBob25lJTIwMTIlMjBwcm98ZW58MHx8MHx8&w=1000&q=80'},
-            {id: 4, name: 'IPHONE 12', price: 60000, rating: 4, img: 'https://images.unsplash.com/photo-1611791485440-24e8239a0377?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aXBob25lJTIwMTIlMjBwcm98ZW58MHx8MHx8&w=1000&q=80'},
-            {id: 4, name: 'IPHONE 12', price: 60000, rating: 4, img: 'https://images.unsplash.com/photo-1611791485440-24e8239a0377?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aXBob25lJTIwMTIlMjBwcm98ZW58MHx8MHx8&w=1000&q=80'},
-            {id: 4, name: 'IPHONE 12', price: 60000, rating: 4, img: 'https://images.unsplash.com/photo-1611791485440-24e8239a0377?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aXBob25lJTIwMTIlMjBwcm98ZW58MHx8MHx8&w=1000&q=80'},
-
-        ]
+        this._devices = []
         this._selectedType = {};
         this._selectedBrand = {};
+        this._page = 1;
+        this._totalCount = 0; // отвечает за кол-во товаров , которые доступны по тому или иному запросу
+        this._limit = 3;// кол-во товаров на одному странице
         makeAutoObservable(this); // теперь mobx будет следить за изменениями нашего конструктора
     }
     
@@ -33,10 +25,20 @@ export default class DeviceStore {
     }
     // при нажатии на какой-то конкретный тип, нам надо будет его выделять
     setSelectedType(type){
+        this.setPage(1)
         this._selectedType = type;
     }
     setSelectedBrand(brand){
+        this.setPage(1)
         this._selectedBrand = brand;
+    }
+
+    setPage(page) {
+        this._page = page;
+    }
+
+    setTotalCount(totalCount){
+        this._totalCount = totalCount
     }
     // вызывается только в случае, когда переменная, которая используется внутри была изменена
     get types() { // для получения переменных из нашего состояния
@@ -56,5 +58,15 @@ export default class DeviceStore {
     
     get selectedBrand(){
         return this._selectedBrand;
+    }
+
+    get totalCount(){
+        return this._totalCount
+    }
+    get page(){
+        return this._page
+    }
+    get limit(){
+        return this._limit
     }
 }

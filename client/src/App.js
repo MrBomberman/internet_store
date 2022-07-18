@@ -16,11 +16,13 @@ const App = observer(() => {
   useEffect(() => {
     setTimeout(() => {
       check().then(data => {
-        user.setUser(true);
-        user.setIsAuth(true)
+        user.setUser(data);
+        user.setIsAuth(true);
       }).finally(() => setLoading(false))
     }, 1000)
+    console.log(localStorage.getItem('token'))
   }, [])
+
 
   if (loading) {
     return <Spinner animation={'grow'}/>
